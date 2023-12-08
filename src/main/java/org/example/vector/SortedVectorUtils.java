@@ -22,18 +22,17 @@ public class SortedVectorUtils {
             Field f = object.getClass().getDeclaredField(field);
             f.setAccessible(true);
             return f.get(object);
-        }
-        catch (NoSuchFieldException | IllegalAccessException exception) {
+        } catch (NoSuchFieldException | IllegalAccessException exception) {
             throw new IllegalArgumentException("Class " + object.getClass().getName() + " not contain field " + field);
         }
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public static int compareFields(Object obj1, Object obj2, String field) {
         var val1 = getFieldValue(obj1, field);
         var val2 = getFieldValue(obj2, field);
-        if (val1 instanceof Number && val2 instanceof Number) {
-            return (((Number) val1).doubleValue() > ((Number) val2).doubleValue()) ? 1 : (((Number) val1).doubleValue() == ((Number) val2).doubleValue()) ? 0 : 1;
-        }
-        else throw new IllegalArgumentException();
+        if (val1.getClass() == val2.getClass() && val1 instanceof Comparable)
+            return ((Comparable) val1).compareTo(val2);
+        else throw new IllegalArgumentException("Incomparable objects");
     }
 }

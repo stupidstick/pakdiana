@@ -1,4 +1,4 @@
-package org.example;
+package org.example.vector;
 
 import java.lang.reflect.Field;
 
@@ -26,5 +26,14 @@ public class SortedVectorUtils {
         catch (NoSuchFieldException | IllegalAccessException exception) {
             throw new IllegalArgumentException("Class " + object.getClass().getName() + " not contain field " + field);
         }
+    }
+
+    public static int compareFields(Object obj1, Object obj2, String field) {
+        var val1 = getFieldValue(obj1, field);
+        var val2 = getFieldValue(obj2, field);
+        if (val1 instanceof Number && val2 instanceof Number) {
+            return (((Number) val1).doubleValue() > ((Number) val2).doubleValue()) ? 1 : (((Number) val1).doubleValue() == ((Number) val2).doubleValue()) ? 0 : 1;
+        }
+        else throw new IllegalArgumentException();
     }
 }

@@ -1,6 +1,5 @@
-package org.example;
+package org.example.vector;
 
-import java.util.Collections;
 import java.util.Vector;
 
 public class SortedVector<T> {
@@ -19,5 +18,9 @@ public class SortedVector<T> {
         for (; i < vector.size(); i++) {
 
         }
+    }
+
+    public void sort(T obj1, T obj2) {
+        System.out.println(SortedVectorUtils.compareFields(obj1, obj2, sortField));
     }
 }

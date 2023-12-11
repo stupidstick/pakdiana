@@ -13,8 +13,8 @@ public class Main {
         System.out.println(vector.cloneVector());
         Entity e = vector.get(3);
         System.out.println(e);
-        e.setData("bebra");
-        System.out.println(vector.search("bebra"));
+        e.setVal(100);
+        System.out.println(vector.search(100));
         System.out.println(vector.cloneVector());
     }
 }

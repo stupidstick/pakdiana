@@ -1,5 +1,7 @@
 package org.example.vector;
 
+import org.apache.commons.lang3.ClassUtils;
+
 import java.lang.reflect.Field;
 import java.util.Vector;
 
@@ -31,7 +33,8 @@ public class SortedVector<T> {
     //binary search
     @SuppressWarnings({"rawtypes", "unchecked"})
     public T search(Object key) {
-        if (key.getClass() != fieldType)
+        sort();
+        if (key.getClass() != (fieldType.isPrimitive() ? ClassUtils.primitiveToWrapper(fieldType): fieldType))
             throw new IllegalArgumentException("key must be " + fieldType.getName());
         int low = 0;
         int high = vector.size() - 1;

@@ -12,7 +12,8 @@ import java.util.Random;
 @NoArgsConstructor
 @Data
 public class Entity {
-    @SortField
     private String data = String.valueOf(new Random().nextInt(100));
-    private double dVal = new Random().nextDouble(50);
+    @SortField
+    private int val = new Random().nextInt(50);
 }
+

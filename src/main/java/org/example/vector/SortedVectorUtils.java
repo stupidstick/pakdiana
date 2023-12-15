@@ -1,28 +1,27 @@
 package org.example.vector;
 
-import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.ObjectUtils;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 
 public class SortedVectorUtils {
-    public static Field findSortField(Class<?> clazz) {
-        Field[] fields = clazz.getDeclaredFields();
-        Field sortField = null;
-        for (Field field : fields) {
-            if (field.isAnnotationPresent(SortField.class))
-                if (sortField != null)
-                    throw new IllegalArgumentException("The class must contain only one field annotated with @SortField");
-                else sortField = field;
-        }
-        if (sortField == null)
-            throw new IllegalArgumentException("The class must contain field annotated with @SortField");
-        return sortField;
+    public static boolean containField(String field, Class<?> clazz) {
+        return Arrays.stream(clazz.getDeclaredFields()).anyMatch(f -> f.getName().equals(field));
     }
 
-    public static Object getFieldValue(Object object, String field) {
+    public static Class<?> getFieldType(String field, Class<?> clazz) {
+        try{
+            return clazz.getDeclaredField(field).getType();
+        }
+        catch (NoSuchFieldException exception) {
+            throw new IllegalArgumentException("Class" + clazz.getName() + " not contain field " + field);
+        }
+    }
+
+
+    public static Object getFieldValue(Object object, String field, Class<?> clazz) {
         try {
-            Field f = object.getClass().getDeclaredField(field);
+            Field f = clazz.getDeclaredField(field);
             f.setAccessible(true);
             return f.get(object);
         } catch (NoSuchFieldException | IllegalAccessException exception) {
@@ -31,9 +30,9 @@ public class SortedVectorUtils {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public static int compareFields(Object obj1, Object obj2, String field) {
-        var val1 = getFieldValue(obj1, field);
-        var val2 = getFieldValue(obj2, field);
+    public static int compareFields(Object obj1, Object obj2, String field, Class<?> clazz) {
+        var val1 = getFieldValue(obj1, field, clazz);
+        var val2 = getFieldValue(obj2, field, clazz);
         if (val1.getClass() == val2.getClass() && val1 instanceof Comparable)
             return ((Comparable) val1).compareTo(val2);
         else throw new IllegalArgumentException("Incomparable objects");
